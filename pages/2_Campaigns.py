@@ -1,3 +1,4 @@
+from webbrowser import get
 from pandas.api.types import (
     is_categorical_dtype,
     is_datetime64_any_dtype,
@@ -6,6 +7,32 @@ from pandas.api.types import (
 )
 import pandas as pd
 import streamlit as st
+import requests
+
+col1, col2 = st.columns(2)
+st.title("List of Campaigns")
+values = st.slider(
+    'Select a range of campaigns',
+    0, 100, (1, 75))
+st.write(values[0:2])
+
+def get_campaigns(skip = 0, limit = 5):
+
+    headers = {
+        'accept': 'application/json',
+    }
+
+    params = {
+        'skip': skip,
+        'limit': limit,
+    }
+
+    response = requests.get('http://127.0.0.1:8000/campaigns/', params=params, headers=headers)
+
+    return st.write(pd.DataFrame(response.json()).set_index("id"))
+
+if st.button("Get Campaigns"):
+    df = get_campaigns(values[0], values[1])
 
 df =pd.read_csv("pages/campaigns_table.csv")
 

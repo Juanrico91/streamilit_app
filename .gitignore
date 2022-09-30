@@ -1,1 +1,8 @@
 streamvenv/
+components/__pycache__/
+config/config.json
+config/example.json
+
+*.ipynb
+*.db
+*.csv
